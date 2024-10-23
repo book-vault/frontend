@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Books from './components/Books';
 import CreateBook from './components/CreateBook';
 import UpdateBook from './components/UpdateBook';
-import BackendStatus from './components/BackendStatus';
-import MainView from './components/MainView';
 import './App.css';
 
-const url = process.env.BACKEND_URL || 'https://backend.bookvault.manish.kr'; // fallback URL
+
+const url = process.env.REACT_APP_BACKEND_URL; 
+console.log("url :",url);
 
 function App() {
   const [view, setView] = useState('list');
@@ -26,7 +26,7 @@ function App() {
       )
     ]);
   };
-
+  
   const fetchBooks = async () => {
     try {
       const response = await fetchWithTimeout(`${url}/api/books`, { method: 'GET' });
@@ -84,18 +84,23 @@ function App() {
 
   return (
     <div className="App">
-      <BackendStatus deployed={backendDeployed} />
-      {backendDeployed && (
-        <MainView 
-          view={view} 
-          books={books} 
-          setView={setView} 
-          setBookToEdit={setBookToEdit} 
-          addBook={addBook} 
-          updateBook={updateBook} 
-          deleteBook={deleteBook}
-          bookToEdit={bookToEdit}
-        />
+      {!backendDeployed ? (
+        <div className="error-message">
+          Backend is not deployed at https://backend.bookvault.manish.kr
+        </div>
+      ) : (
+        <>
+          {view === 'list' && (
+            <Books
+              books={books}
+              onCreateClick={() => setView('create')}
+              onUpdateClick={(book) => { setBookToEdit(book); setView('update'); }}
+              onDeleteClick={deleteBook}
+            />
+          )}
+          {view === 'create' && <CreateBook onSubmit={addBook} />}
+          {view === 'update' && <UpdateBook book={bookToEdit} onSubmit={updateBook} />}
+        </>
       )}
     </div>
   );

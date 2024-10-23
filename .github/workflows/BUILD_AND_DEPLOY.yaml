@@ -13,6 +13,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  REACT_APP_BACKEND_URL: ${{ vars.BACKEND_URL }}
+
 jobs:
   build-and-deploy:
     permissions:
