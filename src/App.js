@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Books from './components/Books';
 import CreateBook from './components/CreateBook';
 import UpdateBook from './components/UpdateBook';
-import './App.css';
 
-
-const url = process.env.REACT_APP_BACKEND_URL; 
+const url = process.env.REACT_APP_BACKEND_URL;
 console.log("url :",url);
 
 function App() {
@@ -16,7 +14,7 @@ function App() {
 
   useEffect(() => {
     fetchBooks();
-  }, []);
+  });
 
   const fetchWithTimeout = (url, options, timeout = 3000) => {
     return Promise.race([
@@ -86,7 +84,7 @@ function App() {
     <div className="App">
       {!backendDeployed ? (
         <div className="error-message">
-          Backend is not deployed at https://backend.bookvault.manish.kr
+          Backend is not deployed at {url}
         </div>
       ) : (
         <>
